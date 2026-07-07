@@ -20,7 +20,7 @@ export default function Order() {
   }
 
   async function fetchPizzaTypes() {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    // await new Promise((resolve) => setTimeout(resolve, 10000));
 
     const pizzaRes = await fetch("/api/pizzas");
     const pizzaJson = await pizzaRes.json();
