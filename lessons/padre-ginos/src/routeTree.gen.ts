@@ -131,7 +131,7 @@ export const routeTree = rootRoute
       "filePath": "order.lazy.jsx"
     },
     "/past": {
-      "filePath": "past.lazy.tsx"
+      "filePath": "past.lazy.jsx"
     }
   }
 }
