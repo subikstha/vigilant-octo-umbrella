@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import getPastOrders from "../api/getPastOrders";
+import getPastOrder from "../api/getPastOrder";
+import Modal from "../Modal";
+import { priceConverter } from "../useCurrency";
 
 export const Route = createLazyFileRoute("/past")({
   component: PastOrdersRoute,
@@ -9,10 +12,19 @@ export const Route = createLazyFileRoute("/past")({
 
 function PastOrdersRoute() {
   const [page, setPage] = useState(1);
+  const [focusedOrder, setFocusedOrder] = useState(null);
   const { isLoading, data } = useQuery({
     queryKey: ["past-orders", page], // Name of the key in the cache
     queryFn: () => getPastOrders(page),
     staleTime: 30000, // in ms
+  });
+
+  const { isLoading: isLoadingPastOrder, data: pastOrderData } = useQuery({
+    queryKey: ["past-order", focusedOrder],
+    queryFn: () => getPastOrder(focusedOrder),
+    staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds
+    enabled: Boolean(focusedOrder), // Run the queryFn if there is a focusedOrder
+    //enabled: !!focusedOrder
   });
 
   if (isLoading) {
