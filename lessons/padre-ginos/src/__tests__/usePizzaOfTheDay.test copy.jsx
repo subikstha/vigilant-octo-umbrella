@@ -1,5 +1,5 @@
 import { expect, test, vi } from "vitest";
-import { renderHook } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import createFetchMock from "vitest-fetch-mock";
 import usePizzaOfTheDay from "../usePizzaOfTheDay";
 
@@ -15,8 +15,21 @@ const testPizza = {
   size: { S: 12.25, M: 16.25, L: 20.25 },
 };
 
+function getPizzaOfTheDay() {
+  let pizza;
+
+  function TestComponent() {
+    pizza = usePizzaOfTheDay();
+    return null;
+  }
+
+  render(<TestComponent />);
+
+  return pizza;
+}
+
 test("gives null when first called", async () => {
   fetch.mockResponse(JSON.stringify(testPizza));
-  const { result } = renderHook(() => usePizzaOfTheDay());
-  expect(result.current).toBeNull();
+  const pizza = getPizzaOfTheDay();
+  expect(pizza).toBeNull();
 });
